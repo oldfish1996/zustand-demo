@@ -30,3 +30,37 @@ const useCountStore = create((set) => ({
 ```ts
 set((state) => newState, true)
 ```
+
+## 局部订阅与全局订阅
+
+假设有如下闯创建状态
+
+```ts
+type State = {
+  numA: number;
+  numB: number;
+};
+
+type Action = {
+  incA: () => void;
+  incB: () => void;
+};
+
+const useStore = create<State & Action>((set) => ({
+  numA: 0,
+  numB: 0,
+  incA: () => set((s) => ({ numA: s.numA + 1 })),
+  incB: () => set((s) => ({ numB: s.numB + 1 })),
+}));
+```
+
+`zustand`可以通过下面这种方式实现对状态的**局部订阅**和**全局订阅**
+
+```ts
+// 局部订阅
+const numA = useStore((s) => s.numA);
+// 全局订阅
+const { numA } = useStore();
+```
+
+局部订阅可以实现只让订阅的组件更新，**减少**渲染次数，可以参考`example/part-sybscribe.tsx`中的对比

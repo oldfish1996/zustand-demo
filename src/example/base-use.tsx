@@ -18,7 +18,7 @@ const useStore = create<State & Action>((set) => ({
   updateName: (name) => set(() => ({ name })),
 }));
 
-export default function Example() {
+export function Example() {
   const { name, updateName, age, updateAge } = useStore();
 
   return (
